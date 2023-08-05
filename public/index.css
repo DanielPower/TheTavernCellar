@@ -1,0 +1,61 @@
+:root {
+	--color-bg: #312e28;
+	--color-fg: #e6d7b8;
+	--color-url: #0c4999;
+}
+
+@font-face {
+	font-family: Berkeley;
+	src: url('/berkeley.woff2');
+	font-weight: 100 900;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	font-family: Berkeley, sans-serif;
+	background: var(--color-bg);
+	color: var(--color-fg);
+	font-weight: 100;
+}
+
+body {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 1rem;
+}
+
+a {
+	color: var(--color-url);
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+#game {
+	background-color: #300;
+	border: 3px solid var(--color-fg);
+}
+
+h1 {
+	font-size: 1.5rem;
+	margin: 1rem 0 1rem 0;
+	font-weight: 150;
+}
+
+h2,
+h3 {
+	margin: 0 0 1rem 0;
+	font-weight: 125;
+}
+
+p {
+	margin: 1rem 0 1rem 0;
+	text-align: justify;
+}
