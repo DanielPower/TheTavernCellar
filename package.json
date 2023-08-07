@@ -1,5 +1,5 @@
 {
-	"name": "The Tavern Basement",
+	"name": "The Tavern Cellar",
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
