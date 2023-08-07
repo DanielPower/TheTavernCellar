@@ -38,9 +38,12 @@ a:hover {
 	text-decoration: underline;
 }
 
-#game {
+canvas {
 	background-color: #300;
 	border: 3px solid var(--color-fg);
+	image-rendering: 'pixelated';
+	width: 100%;
+	height: 100%;
 }
 
 h1 {
