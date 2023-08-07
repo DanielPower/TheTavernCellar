@@ -1,10 +1,10 @@
-import type Two from 'two.js';
+import { two } from '../canvas';
 import { world } from '../ecs';
 import { box } from '../util';
 
 const qBounce = world.with('position', 'velocity', 'size', 'bounce');
 
-export const sBounce = (two: Two) => {
+export const sBounce = () => {
 	for (const entity of qBounce) {
 		const { position, velocity, size } = entity;
 		const { left, right, top, bottom } = box(entity);
