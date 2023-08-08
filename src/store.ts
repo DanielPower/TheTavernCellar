@@ -1,4 +1,4 @@
-import { get, writable } from "svelte/store";
+import { writable } from "svelte/store";
 import { produce } from "immer";
 
 export enum Scene {
@@ -17,13 +17,25 @@ const initialState = {
   adventurerKps: 1 / 6,
   tavernMessage: `Ahoy there, intrepid adventurer! Welcome to "The Rat's Nest," where the rodents roam as free as the laughter and spirits flow. I'm Gump, the friendly face behind the bar, and I couldn't help but notice your determined aura as you entered. Now, I don't mean to be a bother, but we've found ourselves in a bit of a, shall we say, "cheesy" situation. You see, our beloved tavern has become a haven for our rat friends, and we're in dire need of a hero to help us regain control of the situation. What do you say? Could you lend us a hand in ridding our quaint establishment of these furry freeloaders? In return, I promise you the finest mug of "Rat's Tail Ale" and a feast that'll have you grinning from ear to ear!`,
   cellarMessage: `The tavern cellar is dark and damp. You hear a faint dripping sound. You can't see anything, but you can feel a cold stone wall to your left and a wooden door to your right."`,
+  schemaVersion: 1,
 };
 
 function createStore() {
-  const { subscribe, set, update: baseUpdate } = writable(initialState);
+  const {
+    subscribe,
+    set,
+    update: baseUpdate,
+  } = writable({
+    ...initialState,
+    ...JSON.parse(localStorage.getItem("state") || "{}"),
+  });
 
   const update = (mutation: (state: typeof initialState) => void): void => {
-    baseUpdate((state) => produce(state, mutation));
+    baseUpdate((state) => {
+      const newState = produce(state, mutation);
+      localStorage.setItem("state", JSON.stringify(newState));
+      return newState;
+    });
   };
 
   return {
