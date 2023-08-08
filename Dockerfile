@@ -11,4 +11,4 @@ COPY --from=build /app/package.json .
 COPY --from=build /app/build .
 RUN npm install --omit=dev
 EXPOSE 8080/tcp
-CMD ["npm", "exec", "http-server"]
+CMD ["node", "index.js"]
