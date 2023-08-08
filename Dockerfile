@@ -10,5 +10,5 @@ RUN rm -rf ./*
 COPY --from=build /app/package.json .
 COPY --from=build /app/build .
 RUN npm install --omit=dev
-EXPOSE 8080/tcp
+EXPOSE 3000/tcp
 CMD ["node", "index.js"]
