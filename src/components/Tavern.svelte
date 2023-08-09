@@ -13,7 +13,7 @@
         >Accept Quest</Button
       >
     {/if}
-    {#if $store.quests[Quest.first].status === "complete"}
+    {#if $store.kills >= 50}
       <Button
         on:click={store.rest}
         disabled={$store.energy === $store.maxEnergy}
