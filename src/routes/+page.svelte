@@ -44,8 +44,8 @@
 <Tavern />
 <Cellar />
 <div
-  class="sticky bottom-0 h-5 font-bold"
-  style={`background: linear-gradient(90deg, #cccc00 ${levelProgress}%, #000000 ${levelProgress}%);`}
+  class="sticky bottom-0 h-5 pl-1 pr-1 font-bold"
+  style={`background: linear-gradient(90deg, #666600 ${levelProgress}%, #000000 ${levelProgress}%);`}
 >
   <div class="float-left">
     Level {$store.level}
