@@ -10,9 +10,6 @@
     <Button on:click={store.manualKill} disabled={$store.energy === 0}>
       Kill a rat
     </Button>
-    {#if $store.kills >= 50}
-      <Button on:click={store.gotoTavern}>Return to Tavern</Button>
-    {/if}
   </Box>
   <Box class="grow bg-green-950">
     <div>{$store.cellarMessage}</div>

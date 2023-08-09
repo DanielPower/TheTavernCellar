@@ -1,13 +1,11 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import Box from "../components/Box.svelte";
   import Cellar from "../components/Cellar.svelte";
   import Tavern from "../components/Tavern.svelte";
-  import { store } from "../store";
+  import { Quest, store } from "../store";
   import { gameTick } from "../tick";
-  import { nextLevelRequirement } from "../util";
-
-  let levelProgress = 0;
+  import Button from "../components/Button.svelte";
+  import Hud from "../components/Hud.svelte";
 
   onMount(() => {
     let lastTick = Date.now();
@@ -19,38 +17,15 @@
     };
     loop();
   });
-
-  $: {
-    levelProgress =
-      ($store.experience / nextLevelRequirement($store.level)) * 100;
-  }
 </script>
 
 <h1 class="text-2xl">The Tavern Cellar</h1>
 <p class="pb-1 text-lg">Created for Gump Jam</p>
-<div class="sticky top-0 flex">
-  <Box class="grow flex-col bg-red-950">
-    <div>Rats killed: {Math.floor($store.kills)}</div>
-  </Box>
-  <Box class="grow flex-col bg-red-950">
-    <div>Energy: {$store.energy} / {$store.maxEnergy}</div>
-  </Box>
-  {#if $store.hiredAdventurers > 0}
-    <Box class="grow flex-col bg-red-950">
-      <div>Adventurers: {$store.hiredAdventurers}</div>
-    </Box>
-  {/if}
+<Button on:click={store.reset}>Reset</Button>
+<div class="sticky top-0 flex flex-col">
+  <Hud />
 </div>
 <Tavern />
-<Cellar />
-<div
-  class="sticky bottom-0 h-5 pl-1 pr-1 font-bold"
-  style={`background: linear-gradient(90deg, #666600 ${levelProgress}%, #000000 ${levelProgress}%);`}
->
-  <div class="float-left">
-    Level {$store.level}
-  </div>
-  <div class="float-right">
-    {$store.experience} / {nextLevelRequirement($store.level)}
-  </div>
-</div>
+{#if $store.quests[Quest.first].status !== "inactive"}
+  <Cellar />
+{/if}
