@@ -13,7 +13,7 @@
       const now = Date.now();
       gameTick((now - lastTick) / 1000);
       lastTick = now;
-      setTimeout(loop, 4);
+      setTimeout(loop, 10);
     };
     loop();
   });
