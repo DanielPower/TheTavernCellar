@@ -26,6 +26,4 @@
   <Hud />
 </div>
 <Tavern />
-{#if $store.quests[Quest.first].status !== "inactive"}
-  <Cellar />
-{/if}
+<Cellar />

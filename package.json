@@ -35,6 +35,7 @@
   },
   "type": "module",
   "dependencies": {
-    "immer": "^10.0.2"
+    "immer": "^10.0.2",
+    "tsparticles-confetti": "^2.12.0"
   }
 }

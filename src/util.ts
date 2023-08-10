@@ -1,1 +1,1 @@
-export const nextLevelRequirement = (level: number) => 25 * level ** 1.1;
+export const nextLevelRequirement = (level: number) => 25 * 1.1 ** (level - 1);

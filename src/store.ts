@@ -18,7 +18,6 @@ export type QuestState = {
 
 type State = {
   adventurerKps: number;
-  cellarMessage: string;
   clickPower: number;
   energy: number;
   experience: number;
@@ -28,13 +27,13 @@ type State = {
   maxEnergy: number;
   scene: Scene;
   schemaVersion: number;
-  tavernMessage: string;
+  tavernStage: number;
   quests: Record<Quest, QuestState>;
+  openedCellars: number[];
 };
 
 const initialState: () => State = () => ({
   adventurerKps: 1 / 6,
-  cellarMessage: `The tavern cellar is dark and damp. You hear a faint dripping sound. You can't see anything, but you can feel a cold stone wall to your left and a wooden door to your right."`,
   clickPower: 1,
   energy: 50,
   experience: 0,
@@ -44,12 +43,13 @@ const initialState: () => State = () => ({
   maxEnergy: 50,
   scene: Scene.tavern,
   schemaVersion: 1,
-  tavernMessage: `Ahoy there, intrepid adventurer! Welcome to "The Rat's Nest," where the rodents roam as free as the laughter and spirits flow. I'm Gump, the friendly face behind the bar, and I couldn't help but notice your determined aura as you entered. Now, I don't mean to be a bother, but we've found ourselves in a bit of a, shall we say, "cheesy" situation. You see, our beloved tavern has become a haven for our rat friends, and we're in dire need of a hero to help us regain control of the situation. What do you say? Could you lend us a hand in ridding our quaint establishment of these furry freeloaders? In return, I promise you the finest mug of "Rat's Tail Ale" and a feast that'll have you grinning from ear to ear!`,
+  tavernStage: 0,
   quests: {
     [Quest.first]: {
       status: "inactive",
     },
   },
+  openedCellars: [],
 });
 
 function createStore() {
@@ -78,12 +78,12 @@ function createStore() {
 
   return {
     subscribe,
-    manualKill: () =>
+    manualKill: (experience: number) =>
       update((state) => {
         if (state.energy > 0) {
           state.kills += state.clickPower;
           state.energy -= 1;
-          state.experience += 2;
+          state.experience += experience;
         }
       }),
     adventurerKill: (dt: number) =>
@@ -118,6 +118,14 @@ function createStore() {
         state.level += 1;
       }),
     getState: () => get(store),
+    openCellar: (cellar: number) =>
+      update((state) => {
+        state.openedCellars.push(cellar);
+      }),
+    advanceTavernStage: () =>
+      update((state) => {
+        state.tavernStage += 1;
+      }),
   };
 }
 
