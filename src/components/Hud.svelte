@@ -1,27 +1,28 @@
 <script lang="ts">
   import { store } from "../store";
-  import Box from "./Box.svelte";
   import { nextLevelRequirement } from "../util";
 
   let levelProgress = 0;
+  let fields: string[] = [];
   $: {
     levelProgress =
       ($store.experience / nextLevelRequirement($store.level)) * 100;
+    fields = [
+      `Rats killed: ${Math.floor($store.kills)}`,
+      `Energy: ${$store.energy} / ${$store.maxEnergy}`,
+      ...($store.hiredAdventurers > 0
+        ? `Adventurers: ${$store.hiredAdventurers}`
+        : []),
+    ];
   }
 </script>
 
 <div class="flex">
-  <Box class="grow flex-col bg-red-950 p-0 pl-1 text-sm">
-    <div>Rats killed: {Math.floor($store.kills)}</div>
-  </Box>
-  <Box class="grow flex-col bg-red-950 p-0 pl-1 text-sm">
-    <div>Energy: {$store.energy} / {$store.maxEnergy}</div>
-  </Box>
-  {#if $store.hiredAdventurers > 0}
-    <Box class="grow flex-col bg-red-950 text-sm">
-      <div>Adventurers: {$store.hiredAdventurers}</div>
-    </Box>
-  {/if}
+  {#each fields as field}
+    <div class="grow rounded-md border bg-red-950 p-0 pl-1 text-sm">
+      <div>{field}</div>
+    </div>
+  {/each}
 </div>
 <div
   class=" h-5 rounded-md border pl-1 pr-1 text-sm font-bold"
@@ -31,6 +32,8 @@
     Level {$store.level}
   </div>
   <div class="float-right">
-    {$store.experience} / {nextLevelRequirement($store.level)}
+    {Math.floor($store.experience)} / {Math.ceil(
+      nextLevelRequirement($store.level)
+    )}
   </div>
 </div>
