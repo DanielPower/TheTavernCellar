@@ -2,6 +2,7 @@ import { confetti } from "tsparticles-confetti";
 import { levelUpSound } from "./sounds";
 import { store } from "./store";
 import { nextLevelRequirement } from "./util";
+import { stages } from "./tavern";
 
 const tryLevelUp = () => {
   let state = store.getState();
@@ -17,7 +18,14 @@ const tryLevelUp = () => {
   }
 };
 
+const tryAdvanceTavernStage = () => {
+  if (stages[store.getState().tavernStage].advanceCondition?.()) {
+    store.advanceTavernStage();
+  }
+};
+
 export const gameTick = (dt: number) => {
   store.adventurerKill(dt);
   tryLevelUp();
+  tryAdvanceTavernStage();
 };
