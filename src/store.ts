@@ -1,6 +1,7 @@
 import { get, writable } from "svelte/store";
 import { produce } from "immer";
 import { nextLevelRequirement } from "./util";
+import { TavernStage } from "./tavern";
 
 export enum Quest {
   first,
@@ -27,7 +28,7 @@ type State = {
   maxEnergy: number;
   scene: Scene;
   schemaVersion: number;
-  tavernStage: number;
+  tavernStage: TavernStage;
   quests: Record<Quest, QuestState>;
   openedCellars: number[];
 };
@@ -43,7 +44,7 @@ const initialState: () => State = () => ({
   maxEnergy: 50,
   scene: Scene.tavern,
   schemaVersion: 1,
-  tavernStage: 0,
+  tavernStage: TavernStage.introduction,
   quests: {
     [Quest.first]: {
       status: "inactive",
