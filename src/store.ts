@@ -1,7 +1,6 @@
-import { writable } from "svelte/store";
+import { get, writable } from "svelte/store";
 import { produce } from "immer";
 import { nextLevelRequirement } from "./util";
-import { levelUpSound } from "./sounds";
 
 export enum Quest {
   first,
@@ -71,11 +70,6 @@ function createStore() {
     baseUpdate((state) => {
       const newState = produce(state, (draft) => {
         mutation(draft);
-        while (draft.experience >= nextLevelRequirement(draft.level)) {
-          draft.experience -= nextLevelRequirement(draft.level);
-          draft.level += 1;
-          levelUpSound.play();
-        }
       });
       localStorage.setItem("state", JSON.stringify(newState));
       return newState;
@@ -123,6 +117,7 @@ function createStore() {
         state.experience -= nextLevelRequirement(state.level);
         state.level += 1;
       }),
+    getState: () => get(store),
   };
 }
 
