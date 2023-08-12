@@ -1,6 +1,6 @@
 <script lang="ts">
   import { store } from "../store";
-  import { nextLevelRequirement } from "../util";
+  import { nextLevelRequirement, bigNum } from "../util";
 
   let levelProgress = 0;
   let fields: string[] = [];
@@ -8,8 +8,8 @@
     levelProgress =
       ($store.experience / nextLevelRequirement($store.level)) * 100;
     fields = [
-      `Rats killed: ${Math.floor($store.kills)}`,
-      `Gold: ${$store.gold}`,
+      `Rats killed: ${bigNum($store.kills)}`,
+      `Gold: ${bigNum($store.gold)}`,
     ];
   }
 </script>
@@ -29,8 +29,6 @@
     Level {$store.level}
   </div>
   <div class="float-right">
-    {Math.floor($store.experience)} / {Math.ceil(
-      nextLevelRequirement($store.level)
-    )}
+    {bigNum($store.experience)} / {bigNum(nextLevelRequirement($store.level))}
   </div>
 </div>
