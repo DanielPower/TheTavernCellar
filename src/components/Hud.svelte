@@ -9,10 +9,7 @@
       ($store.experience / nextLevelRequirement($store.level)) * 100;
     fields = [
       `Rats killed: ${Math.floor($store.kills)}`,
-      `Energy: ${$store.energy} / ${$store.maxEnergy}`,
-      ...($store.hiredAdventurers > 0
-        ? `Adventurers: ${$store.hiredAdventurers}`
-        : []),
+      `Gold: ${$store.gold}`,
     ];
   }
 </script>

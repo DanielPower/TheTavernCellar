@@ -17,31 +17,33 @@ export type QuestState = {
   status: "accepted" | "completed" | "inactive";
 };
 
+export type CellarState = {
+  id: number;
+  adventurersHired: number;
+  adventurerKillRemainder: number;
+};
+
 type State = {
+  gold: number;
   adventurerKps: number;
   clickPower: number;
-  energy: number;
   experience: number;
-  hiredAdventurers: number;
   kills: number;
   level: number;
-  maxEnergy: number;
   scene: Scene;
   schemaVersion: number;
   tavernStage: TavernStage;
   quests: Record<Quest, QuestState>;
-  openedCellars: number[];
+  openedCellars: CellarState[];
 };
 
 const initialState: () => State = () => ({
+  gold: 0,
   adventurerKps: 1 / 6,
   clickPower: 1,
-  energy: 50,
   experience: 0,
-  hiredAdventurers: 0,
   kills: 0,
   level: 1,
-  maxEnergy: 50,
   scene: Scene.tavern,
   schemaVersion: 1,
   tavernStage: TavernStage.introduction,
@@ -81,15 +83,21 @@ function createStore() {
     subscribe,
     manualKill: (experience: number) =>
       update((state) => {
-        if (state.energy > 0) {
-          state.kills += state.clickPower;
-          state.energy -= 1;
-          state.experience += experience;
-        }
+        state.kills += state.clickPower;
+        state.experience += experience;
+        state.gold += 10;
       }),
     adventurerKill: (dt: number) =>
       update((state) => {
-        state.kills += state.hiredAdventurers * state.adventurerKps * dt;
+        state.openedCellars.forEach((cellar) => {
+          const kills =
+            cellar.adventurersHired * state.adventurerKps * dt +
+            cellar.adventurerKillRemainder;
+          cellar.adventurerKillRemainder = kills - Math.floor(kills);
+          console.log(kills, cellar.adventurerKillRemainder);
+          state.kills += Math.floor(kills);
+          state.gold += 5 * Math.floor(kills);
+        });
       }),
     gotoTavern: () =>
       update((state) => {
@@ -100,17 +108,17 @@ function createStore() {
         state.scene = Scene.cellar;
       }),
     gotoShop: () => update((state) => ({ ...state, scene: Scene.shop })),
-    hireAdventurers: (count: number) =>
+    hireAdventurers: (id: number, count: number, cost: number) =>
       update((state) => {
-        state.hiredAdventurers += count;
+        if (state.gold < cost) {
+          return;
+        }
+        state.openedCellars[id].adventurersHired += count;
+        state.gold -= cost;
       }),
     acceptQuest: (quest: Quest) =>
       update((state) => {
         state.quests[quest].status = "accepted";
-      }),
-    rest: () =>
-      update((state) => {
-        state.energy = state.maxEnergy;
       }),
     reset: () => set(initialState()),
     levelUp: () =>
@@ -121,7 +129,11 @@ function createStore() {
     getState: () => get(store),
     openCellar: (cellar: number) =>
       update((state) => {
-        state.openedCellars.push(cellar);
+        state.openedCellars[cellar] = {
+          id: cellar,
+          adventurersHired: 0,
+          adventurerKillRemainder: 0,
+        };
       }),
     advanceTavernStage: () =>
       update((state) => {

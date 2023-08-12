@@ -4,6 +4,7 @@
   import Button from "./Button.svelte";
   import Room from "./Room.svelte";
   import { TavernStage } from "../tavern";
+  import { exponentialCost } from "../util";
 
   let cellars: {
     id: number;
@@ -12,6 +13,7 @@
     entranceButtonText: string;
     interiorText: string;
     ratExperience: number;
+    initialAdventurerCost: number;
   }[] = [];
   $: {
     cellars = [
@@ -22,6 +24,7 @@
         entranceButtonText: "Enter the cellar",
         interiorText: `The tavern cellar is dark and damp. You hear a faint dripping sound. You can't see anything, but you can feel a cold stone wall to your left and a wooden door to your right."`,
         ratExperience: 2,
+        initialAdventurerCost: 5,
       },
       {
         id: 1,
@@ -30,6 +33,7 @@
         entranceButtonText: "Enter the cellar",
         interiorText: "foo",
         ratExperience: 5,
+        initialAdventurerCost: 100,
       },
     ];
   }
@@ -37,10 +41,18 @@
 
 {#each cellars as cellar}
   {#if cellar.available}
-    {#if $store.openedCellars.includes(cellar.id)}
+    {#if $store.openedCellars[cellar.id]}
       <Room>
         <div slot="actions">
           <img src="cellar.webp" alt="Cellar" />
+          <div class="flex-col">
+            <div class="grow rounded-md border bg-red-950 p-0 pl-1 text-sm">
+              <div>
+                Hired Adventurers: {$store.openedCellars[cellar.id]
+                  .adventurersHired}
+              </div>
+            </div>
+          </div>
           <Button
             on:click={(event) => {
               store.manualKill(cellar.ratExperience);
@@ -54,11 +66,37 @@
                 },
                 colors: ["#dd0000", "#8a0303", "#6d0000"],
               });
-              console.log(event.clientX, event.clientY);
             }}
-            disabled={$store.energy === 0}
           >
             Kill a rat
+          </Button>
+          <Button
+            disabled={$store.gold <
+              exponentialCost(
+                cellar.initialAdventurerCost,
+                $store.openedCellars[cellar.id].adventurersHired,
+                1.2
+              )}
+            on:click={() =>
+              store.hireAdventurers(
+                cellar.id,
+                1,
+                exponentialCost(
+                  cellar.initialAdventurerCost,
+                  $store.openedCellars[cellar.id].adventurersHired,
+                  1.2
+                )
+              )}
+          >
+            <div class="flex flex-wrap justify-center gap-x-2">
+              Hire an adventurer <div>
+                🪙{exponentialCost(
+                  cellar.initialAdventurerCost,
+                  $store.openedCellars[cellar.id].adventurersHired,
+                  1.2
+                )}
+              </div>
+            </div>
           </Button>
         </div>
         <p slot="text">{cellar.interiorText}</p>
