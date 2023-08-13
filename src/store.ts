@@ -4,19 +4,11 @@ import { nextLevelRequirement } from "./util";
 import { TavernStage } from "./tavern";
 import { cellars } from "./cellars";
 
-export enum Quest {
-  first,
-}
-
 export enum Scene {
   cellar,
   tavern,
   shop,
 }
-
-export type QuestState = {
-  status: "accepted" | "completed" | "inactive";
-};
 
 export type CellarState = {
   id: number;
@@ -34,7 +26,6 @@ export type State = {
   scene: Scene;
   schemaVersion: number;
   tavernStage: TavernStage;
-  quests: Record<Quest, QuestState>;
   openedCellars: CellarState[];
 };
 
@@ -48,11 +39,6 @@ const initialState: () => State = () => ({
   scene: Scene.tavern,
   schemaVersion: 1,
   tavernStage: TavernStage.introduction,
-  quests: {
-    [Quest.first]: {
-      status: "inactive",
-    },
-  },
   openedCellars: [],
 });
 
@@ -115,10 +101,6 @@ function createStore() {
         }
         state.openedCellars[id].adventurersHired += count;
         state.gold -= cost;
-      }),
-    acceptQuest: (quest: Quest) =>
-      update((state) => {
-        state.quests[quest].status = "accepted";
       }),
     reset: () => set(initialState()),
     levelUp: () =>

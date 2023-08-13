@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import Cellar from "../components/Cellar.svelte";
   import Tavern from "../components/Tavern.svelte";
-  import { Quest, store } from "../store";
+  import { store } from "../store";
   import { gameTick } from "../tick";
   import Button from "../components/Button.svelte";
   import Hud from "../components/Hud.svelte";
