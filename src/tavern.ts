@@ -29,7 +29,10 @@ export const stages: {
     buttons: [
       {
         text: "Accept Quest",
-        action: () => store.advanceTavernStage(),
+        action: () => {
+          store.advanceTavernStage();
+          store.openCellar();
+        },
       },
     ],
     advanceCondition: () => store.getState().kills >= 50,

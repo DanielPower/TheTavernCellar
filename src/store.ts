@@ -1,8 +1,7 @@
 import { get, writable } from "svelte/store";
 import { produce } from "immer";
-import { nextLevelRequirement } from "./util";
+import { exponentialCost, nextLevelRequirement } from "./util";
 import { TavernStage } from "./tavern";
-import { cellars } from "./cellars";
 
 export enum Scene {
   cellar,
@@ -14,6 +13,9 @@ export type CellarState = {
   id: number;
   adventurersHired: number;
   adventurerKillRemainder: number;
+  ratExperience: number;
+  ratGold: number;
+  initialAdventurerCost: number;
 };
 
 export type State = {
@@ -82,7 +84,7 @@ function createStore() {
             cellar.adventurerKillRemainder;
           cellar.adventurerKillRemainder = kills - Math.floor(kills);
           state.kills += Math.floor(kills);
-          state.gold += cellars[cellar.id].ratGold * Math.floor(kills);
+          state.gold += cellar.ratGold * Math.floor(kills);
         });
       }),
     gotoTavern: () =>
@@ -109,13 +111,17 @@ function createStore() {
         state.level += 1;
       }),
     getState: () => get(store),
-    openCellar: (cellar: number) =>
+    openCellar: () =>
       update((state) => {
-        state.openedCellars[cellar] = {
-          id: cellar,
+        const id = state.openedCellars.length;
+        state.openedCellars.push({
+          id,
           adventurersHired: 0,
           adventurerKillRemainder: 0,
-        };
+          ratExperience: exponentialCost(5, id, 1.3),
+          ratGold: exponentialCost(5, id, 1.2),
+          initialAdventurerCost: exponentialCost(100, id, 1.2),
+        });
       }),
     advanceTavernStage: () =>
       update((state) => {

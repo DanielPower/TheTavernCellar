@@ -7,6 +7,6 @@
     <span class="float-left max-w-[calc(min(40%,14rem))] pr-2">
       <slot name="actions" />
     </span>
-    <p><slot name="text" /></p>
+    <slot name="text" />
   </Box>
 </div>
