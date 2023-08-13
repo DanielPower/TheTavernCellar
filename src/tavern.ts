@@ -2,6 +2,7 @@ import { store } from "./store";
 
 export enum TavernStage {
   introduction,
+  ratsNoticed,
   firstQuestAccepted,
   firstQuestCompleted,
   foundSecondCellar,
@@ -15,26 +16,36 @@ export const stages: {
   };
 } = {
   [TavernStage.introduction]: {
-    text: `Ahoy there, intrepid adventurer! Welcome to "The Rat's Nest," where the rodents roam as free as the laughter and spirits flow. I'm Gump, the friendly face behind the bar, and I couldn't help but notice your determined aura as you entered. Now, I don't mean to be a bother, but we've found ourselves in a bit of a, shall we say, "cheesy" situation. You see, our beloved tavern has become a haven for our rat friends, and we're in dire need of a hero to help us regain control of the situation. What do you say? Could you lend us a hand in ridding our quaint establishment of these furry freeloaders? In return, I promise you the finest mug of "Rat's Tail Ale" and a feast that'll have you grinning from ear to ear!`,
+    text: `Welcome to The Rat's Nest Tavern, traveler. I'm Gump, the barkeep here. What can I get you today? A fine ale, perhaps? Our special today is the "Rat's Revenge" brew. Careful though, it's got a bite to it.`,
+    buttons: [
+      {
+        text: "Inquire about the rats",
+        action: () => store.advanceTavernStage(),
+      },
+    ],
+  },
+  [TavernStage.ratsNoticed]: {
+    text: `Ah, you've noticed the commotion downstairs, I see. Those pesky rats have taken quite a liking to our cellar. It's become a bit of a nuisance, I'm afraid. That's why I've put out a call for brave adventurers like yourself to help me deal with the problem. You see, I'm not much of a fighter myself, and I could use some assistance in clearing out those critters. I'll reward you handsomely for your efforts, of course. Gold, treasures, and even free drinks for life are on the table. Just head down to the cellar and take care of those rats, and I'll make sure you're well taken care of.`,
     buttons: [
       {
         text: "Accept Quest",
         action: () => store.advanceTavernStage(),
       },
     ],
+    advanceCondition: () => store.getState().kills >= 50,
   },
   [TavernStage.firstQuestAccepted]: {
-    text: `A hearty thank you, brave soul, for accepting our ratty quest! Your courage shines like a beacon in the night. Follow me, and I shall lead you to the heart of our rodent conundrum. Gump beckons with a flourish of his arm Right this way, down the winding path of cheese and chivalry, to the cellar door that harbors both mystery and mischief. May your steps be sure and your spirit unwavering as you embark on this daring venture to restore our tavern's glory!`,
+    text: `Thank you for stepping up to the challenge, brave adventurer. Your willingness to help us deal with this rat problem is greatly appreciated. The safety of The Rat's Nest Tavern is in your capable hands. May your skills and courage guide you to victory in the cellar. And remember, if you need a drink to steady your nerves before or after your task, just let me know. Good luck, and may fortune favor your endeavors!`,
     buttons: [],
     advanceCondition: () => store.getState().kills >= 50,
   },
   [TavernStage.firstQuestCompleted]: {
-    text: `The barkeep looks at you and says, "You've killed 50 rats! You must be exhausted. I'll give you 10 gold for every rat you kill. Just let me know when you're ready to rest."`,
+    text: `Impressive work, adventurer! Your efforts have not gone unnoticed. Clearing out 50 rats is no small feat, and I commend your determination. The tavern is already feeling a bit cleaner thanks to your hard work. If you're looking to expedite the process and bring an end to this infestation more swiftly, there's an adventurer's guild not far from here. They specialize in dealing with these kinds of challenges and can provide you with skilled assistance. Their headquarters are just a short walk from here, near the town square. Hiring some extra hands might be a wise choice, especially considering the depths of the sub-cellar and the potential for more rats to come. Whatever you decide, your dedication to this task is greatly appreciated, and I'm confident that your actions will lead to a cleaner and safer tavern for all.`,
     buttons: [],
-    advanceCondition: () => store.getState().openedCellars.length >= 2,
+    advanceCondition: () => store.getState().level >= 5,
   },
   [TavernStage.foundSecondCellar]: {
-    text: `You've uncovered the entrance to the sub-cellar, where I suspect the rat horde has been plotting their mischief. But, I must confess, the heart of the rat uprising might lie even deeper, in the depths beyond this very door. It's a daunting task, and I wouldn't blame you if you hesitated. However, if you're willing to go the extra mile – or should I say, the extra tunnel – I have a key right here that will grant you access. Gump presents a tarnished key, its edges worn from countless adventures Take it, and may it guide you through the hidden passages that could lead to victory... and perhaps a little less rat-infestation. Godspeed, brave soul!`,
+    text: `Ah, I see you've found the entrance to the sub-cellar, adventurer. Well done. But I must confess, the true heart of the rat infestation lies even deeper, in the second level of our vast cellar system. It seems those crafty creatures have a way of burrowing into the most unexpected places. To aid you in your quest, I offer you this key. It will grant you access to the sub-cellar's lower level. Be cautious though, for the challenge ahead may be greater than what you've faced above. I have faith in your abilities, and I trust that you'll handle the situation with the utmost care and determination. Once you're ready, use the key to unlock the entrance to the second level. And remember, the reward for your efforts will be worth your dedication. May you find success in your venture, and may these subterranean pests be dealt with once and for all.`,
     buttons: [],
     advanceCondition: () => false,
   },

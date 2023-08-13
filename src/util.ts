@@ -10,7 +10,13 @@ export const nextLevelRequirement = (level: number) =>
 const log1000 = (n: number) => Math.log(n) / Math.log(1000);
 
 const alpha = Array.from(Array(26)).map((_, i) => String.fromCharCode(i + 65));
-const suffixes = ["", ...alpha.map((a) => a.toLowerCase()), ...alpha];
+const suffixCharacters = [...alpha.map((a) => a.toLowerCase()), ...alpha];
+const suffixes = [
+  ...suffixCharacters,
+  ...suffixCharacters.map((a) => suffixCharacters.map((b) => a + b)).flat(),
+];
+
+console.log(suffixes);
 
 export const bigNum = (number: number, precision: number = 3) => {
   if (number < 1000) {

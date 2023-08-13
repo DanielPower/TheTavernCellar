@@ -94,7 +94,6 @@ function createStore() {
             cellar.adventurersHired * state.adventurerKps * dt +
             cellar.adventurerKillRemainder;
           cellar.adventurerKillRemainder = kills - Math.floor(kills);
-          console.log(kills, cellar.adventurerKillRemainder);
           state.kills += Math.floor(kills);
           state.gold += 5 * Math.floor(kills);
         });
