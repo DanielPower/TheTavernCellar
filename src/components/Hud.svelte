@@ -8,7 +8,7 @@
     levelProgress =
       ($store.experience / nextLevelRequirement($store.level)) * 100;
     fields = [
-      `Rats killed: ${bigNum($store.kills)}`,
+      `Rats killed: ${bigNum(store.queryKills())}`,
       `Gold: ${bigNum($store.gold)}`,
     ];
   }

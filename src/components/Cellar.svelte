@@ -2,7 +2,7 @@
   import { confetti } from "tsparticles-confetti";
   import { store } from "../store";
   import Button from "./Button.svelte";
-  import { exponentialCost } from "../util";
+  import { bigNum, exponentialCost } from "../util";
   import { TavernStage } from "../tavern";
   import Box from "./Box.svelte";
 
@@ -17,17 +17,22 @@
   {#each $store.openedCellars as cellar}
     <Box class="w-1/4 overflow-hidden bg-green-950">
       <img src="cellar.webp" alt="Cellar" />
-      <div class="flex">
+      <div class="flex-col">
+        <div class="grow rounded-md border bg-red-950 p-0 pl-1 text-sm">
+          Kills: {bigNum(cellar.kills, 0)}
+        </div>
         {#if adventurersGuildUnlocked}
           <div class="grow rounded-md border bg-red-950 p-0 pl-1 text-sm">
-            Hired Adventurers: {$store.openedCellars[cellar.id]
-              .adventurersHired}
+            Kills/s: {bigNum(cellar.adventurersHired * $store.adventurerKps)}
+          </div>
+          <div class="grow rounded-md border bg-red-950 p-0 pl-1 text-sm">
+            Hired Adventurers: {bigNum(cellar.adventurersHired, 0)}
           </div>
         {/if}
       </div>
       <Button
         on:click={(event) => {
-          store.manualKill(cellar.ratExperience);
+          store.manualKill(cellar.id);
           confetti({
             particleCount: 30,
             shapes: ["circle"],

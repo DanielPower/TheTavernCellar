@@ -16,6 +16,7 @@ export type CellarState = {
   ratExperience: number;
   ratGold: number;
   initialAdventurerCost: number;
+  kills: number;
 };
 
 export type State = {
@@ -23,7 +24,6 @@ export type State = {
   adventurerKps: number;
   clickPower: number;
   experience: number;
-  kills: number;
   level: number;
   scene: Scene;
   schemaVersion: number;
@@ -36,7 +36,6 @@ const initialState: () => State = () => ({
   adventurerKps: 1 / 6,
   clickPower: 1,
   experience: 0,
-  kills: 0,
   level: 1,
   scene: Scene.tavern,
   schemaVersion: 1,
@@ -70,11 +69,12 @@ function createStore() {
 
   return {
     subscribe,
-    manualKill: (experience: number) =>
+    manualKill: (cellarId: number) =>
       update((state) => {
-        state.kills += state.clickPower;
-        state.experience += experience;
-        state.gold += 10;
+        const cellar = state.openedCellars[cellarId];
+        state.openedCellars[cellarId].kills += state.clickPower;
+        state.experience += cellar.ratExperience;
+        state.gold += cellar.ratGold;
       }),
     adventurerKill: (dt: number) =>
       update((state) => {
@@ -83,7 +83,7 @@ function createStore() {
             cellar.adventurersHired * state.adventurerKps * dt +
             cellar.adventurerKillRemainder;
           cellar.adventurerKillRemainder = kills - Math.floor(kills);
-          state.kills += Math.floor(kills);
+          cellar.kills += Math.floor(kills);
           state.gold += cellar.ratGold * Math.floor(kills);
         });
       }),
@@ -118,6 +118,7 @@ function createStore() {
           id,
           adventurersHired: 0,
           adventurerKillRemainder: 0,
+          kills: 0,
           ratExperience: exponentialCost(5, id, 1.3),
           ratGold: exponentialCost(5, id, 1.2),
           initialAdventurerCost: exponentialCost(100, id, 1.2),
@@ -127,6 +128,7 @@ function createStore() {
       update((state) => {
         state.tavernStage += 1;
       }),
+    queryKills: () => get(store).openedCellars.reduce((a, b) => a + b.kills, 0),
   };
 }
 

@@ -18,9 +18,9 @@ const suffixes = [
 
 export const bigNum = (number: number, precision: number = 3) => {
   if (number < 1000) {
-    return number;
+    return number.toFixed(precision);
   }
-  const suffix = suffixes[Math.floor(log1000(number))];
+  const suffix = suffixes[Math.floor(log1000(number) - 1)];
   const base = number / 1000 ** Math.floor(log1000(number));
   return `${base.toFixed(precision)}${suffix}`;
 };

@@ -15,7 +15,6 @@ const tryLevelUp = () => {
       position: { y: 70 },
     });
     state = store.getState();
-    console.log(state.level, state.level % 5);
     if (state.level % 5 === 0) {
       store.openCellar();
     }

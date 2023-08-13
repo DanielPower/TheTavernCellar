@@ -35,12 +35,11 @@ export const stages: {
         },
       },
     ],
-    advanceCondition: () => store.getState().kills >= 50,
   },
   [TavernStage.firstQuestAccepted]: {
     text: `Thank you for stepping up to the challenge, brave adventurer. Your willingness to help us deal with this rat problem is greatly appreciated. The safety of The Rat's Nest Tavern is in your capable hands. May your skills and courage guide you to victory in the cellar. And remember, if you need a drink to steady your nerves before or after your task, just let me know. Good luck, and may fortune favor your endeavors!`,
     buttons: [],
-    advanceCondition: () => store.getState().kills >= 50,
+    advanceCondition: () => store.queryKills() >= 50,
   },
   [TavernStage.adventurersGuild]: {
     text: `Impressive work, adventurer! Your efforts have not gone unnoticed. Clearing out 50 rats is no small feat, and I commend your determination. The tavern is already feeling a bit cleaner thanks to your hard work. If you're looking to expedite the process and bring an end to this infestation more swiftly, there's an adventurer's guild not far from here. They specialize in dealing with these kinds of challenges and can provide you with skilled assistance. Their headquarters are just a short walk from here, near the town square. Hiring some extra hands might be a wise choice, especially considering the depths of the sub-cellar and the potential for more rats to come. Whatever you decide, your dedication to this task is greatly appreciated, and I'm confident that your actions will lead to a cleaner and safer tavern for all.`,
