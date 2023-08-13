@@ -2,6 +2,7 @@ import { get, writable } from "svelte/store";
 import { produce } from "immer";
 import { nextLevelRequirement } from "./util";
 import { TavernStage } from "./tavern";
+import { cellars } from "./cellars";
 
 export enum Quest {
   first,
@@ -23,7 +24,7 @@ export type CellarState = {
   adventurerKillRemainder: number;
 };
 
-type State = {
+export type State = {
   gold: number;
   adventurerKps: number;
   clickPower: number;
@@ -95,7 +96,7 @@ function createStore() {
             cellar.adventurerKillRemainder;
           cellar.adventurerKillRemainder = kills - Math.floor(kills);
           state.kills += Math.floor(kills);
-          state.gold += 5 * Math.floor(kills);
+          state.gold += cellars[cellar.id].ratGold * Math.floor(kills);
         });
       }),
     gotoTavern: () =>

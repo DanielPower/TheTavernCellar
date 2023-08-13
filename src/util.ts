@@ -5,7 +5,7 @@ export const exponentialCost = (
 ) => Math.floor(initialCost * rate ** (count - 1));
 
 export const nextLevelRequirement = (level: number) =>
-  exponentialCost(25, level, 1.2);
+  exponentialCost(25, level, 1.3);
 
 const log1000 = (n: number) => Math.log(n) / Math.log(1000);
 
@@ -15,8 +15,6 @@ const suffixes = [
   ...suffixCharacters,
   ...suffixCharacters.map((a) => suffixCharacters.map((b) => a + b)).flat(),
 ];
-
-console.log(suffixes);
 
 export const bigNum = (number: number, precision: number = 3) => {
   if (number < 1000) {

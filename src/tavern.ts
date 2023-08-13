@@ -4,7 +4,7 @@ export enum TavernStage {
   introduction,
   ratsNoticed,
   firstQuestAccepted,
-  firstQuestCompleted,
+  adventurersGuild,
   foundSecondCellar,
 }
 
@@ -39,7 +39,7 @@ export const stages: {
     buttons: [],
     advanceCondition: () => store.getState().kills >= 50,
   },
-  [TavernStage.firstQuestCompleted]: {
+  [TavernStage.adventurersGuild]: {
     text: `Impressive work, adventurer! Your efforts have not gone unnoticed. Clearing out 50 rats is no small feat, and I commend your determination. The tavern is already feeling a bit cleaner thanks to your hard work. If you're looking to expedite the process and bring an end to this infestation more swiftly, there's an adventurer's guild not far from here. They specialize in dealing with these kinds of challenges and can provide you with skilled assistance. Their headquarters are just a short walk from here, near the town square. Hiring some extra hands might be a wise choice, especially considering the depths of the sub-cellar and the potential for more rats to come. Whatever you decide, your dedication to this task is greatly appreciated, and I'm confident that your actions will lead to a cleaner and safer tavern for all.`,
     buttons: [],
     advanceCondition: () => store.getState().level >= 5,
